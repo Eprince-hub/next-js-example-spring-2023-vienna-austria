@@ -1,20 +1,18 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getAnimalByName } from '../../../database/animals';
+import { getAnimalById } from '../../../database/animals';
 
 export const dynamic = 'force-dynamic';
 
-export default function FarmPage({ params }) {
-  const singleAnimal = getAnimalByName(params.name);
-
-  console.log(singleAnimal);
+export default async function FarmPage({ params }) {
+  const singleAnimal = await getAnimalById(params.animalId);
 
   if (!singleAnimal) {
     notFound();
   }
 
   return (
-    <main>
+    <main style={{ paddingLeft: '1rem' }}>
       <h1>{singleAnimal.name}</h1>
       <Image
         src={`/images/${singleAnimal.name}.png`}

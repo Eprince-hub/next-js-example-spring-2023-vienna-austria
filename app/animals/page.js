@@ -1,20 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { animals } from '../../database/animals';
+import { getAnimals } from '../../database/animals';
 
 export const metadata = {
   title: 'Animals page',
   description: 'My favorite animals',
 };
 
-export default function AnimalsPage() {
+export default async function AnimalsPage() {
+  const animals = await getAnimals();
+
   return (
-    <main>
+    <main style={{ paddingLeft: '1rem' }}>
       This are my animals
       {animals.map((animal) => {
         return (
           <div key={`animal-div-${animal.id}`}>
-            <Link href={`/animals/${animal.name}`}>{animal.name}</Link>
+            <Link href={`/animals/${animal.id}`}>{animal.name}</Link>
             <br />
             <Image
               src={`/images/${animal.name}.png`}
