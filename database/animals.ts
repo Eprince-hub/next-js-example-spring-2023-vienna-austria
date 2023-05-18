@@ -33,3 +33,48 @@ export const getAnimalById = cache(async (id: number) => {
   `;
   return animal;
 });
+
+export const createAnimal = cache(
+  async (name: string, type: string, object: string) => {
+    if (!name || !type || !object) return undefined;
+
+    const [animal] = await sql<Animal[]>`
+    INSERT INTO animals
+      (name, type, object)
+    VALUES
+      (${name}, ${type}, ${object})
+    RETURNING *
+  `;
+
+    return animal;
+  },
+);
+
+export const deleteAnimalById = cache(async (id: number) => {
+  const [animal] = await sql<Animal[]>`
+    DELETE FROM
+      animals
+    WHERE
+      id = ${id}
+    RETURNING *
+  `;
+  return animal;
+});
+
+export const updateAnimalById = cache(
+  async (id: number, name: string, type: string, object: string) => {
+    if (!name || !type) return undefined;
+
+    const [animal] = await sql<Animal[]>`
+      UPDATE animals
+      SET
+        name = ${name},
+        type = ${type},
+        object = ${object}
+      WHERE
+        id = ${id}
+    RETURNING *
+  `;
+    return animal;
+  },
+);
